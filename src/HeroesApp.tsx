@@ -1,7 +1,10 @@
+import {RouterProvider} from "react-router";
+import {appRouter} from "@/router/app.router.tsx";
 
 export const HeroesApp = () => {
     return (
-        <h1 className="text-3xl font-bold underline">
-            Hello world!
-        </h1>    )
+        <>
+            <RouterProvider router={appRouter} />
+        </>
+    )
 }

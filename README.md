@@ -1,4 +1,4 @@
-# Some notes toa void conflicts with tailwindcss and shadcn
+# Some notes to avoid conflicts with tailwindcss and shadcn
 
 
 - Make sure that both are latests versions (v4 for both)
@@ -6,13 +6,22 @@
  ```js
 npm install tailwindcss @tailwindcss/vite
 ```
-- Verify vite.config.ts has the plugin:
+- Verify vite.config.ts has the plugin and alias config:
 ```js
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import tailwindcss from "@tailwindcss/vite"
+import path from "path";
 
-export default {
-  plugins: [tailwindcss()]
-}
+// https://vite.dev/config/
+export default defineConfig({
+    plugins: [react(),tailwindcss()],
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+        },
+    },
+})
 ```
 - src/index.css has:
  ```js
