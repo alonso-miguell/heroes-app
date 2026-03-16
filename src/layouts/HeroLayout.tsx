@@ -1,16 +1,11 @@
-import {Link, Outlet} from "react-router";
+import {Outlet} from "react-router";
 
-export const HeroLayout= ( )=>{
+export const HeroLayout = () => {
     return (
-        <div className="bg-red-600">
-            <h1> HeroLayout</h1>
-            <ul>
-                <li><Link to={"/"}>Link to HomePage</Link> </li>
-                <li><Link to={"/search"}>Link to Search</Link> </li>
-                <li><Link to={"/hero/1"}>Link to Hero</Link> </li>
-            </ul>
-            <Outlet/>
-
+        <div className="min-h-screen bg-gradient-to-br from-slate-300 via-blue-50 to-purple-900">
+            <div className="max-w-7xl mx-auto p-6">
+                <Outlet />
+            </div>
         </div>
     )
 }
