@@ -8,7 +8,7 @@ interface Props extends PropsWithChildren{
 
 };
 
-export const HeroCard=( {title, icon, children}:Props )=>{
+export const HeroStatsCard=({title, icon, children}:Props )=>{
     return(
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -1,5 +1,5 @@
 import {HeroHeader} from "@/components/custom/HeroHeader.tsx";
-import {HeroStatsBoard} from "@/components/custom/HeroStatsBoard.tsx";
+import {HeroStatsDashboard} from "@/components/custom/HeroStatsDashboard.tsx";
 import {SearchControls} from "@/components/custom/SearchControls.tsx";
 import {SearchFilters} from "@/components/custom/SearchFilters.tsx";
 
@@ -11,7 +11,7 @@ export const SearchPage=()=>{
                 description="Discover, explore, and manage your favorite superheroes and villains"
             />
 
-            <HeroStatsBoard/>
+            <HeroStatsDashboard/>
             <SearchControls />
             <SearchFilters />
 
