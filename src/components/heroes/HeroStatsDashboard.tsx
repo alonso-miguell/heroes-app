@@ -1,6 +1,6 @@
 import {Heart, Trophy, Users, Zap} from "lucide-react";
 import {Badge} from "@/components/ui/badge.tsx";
-import {HeroStatsCard} from "@/components/custom/HeroStatsCard.tsx";
+import {HeroStatsCard} from "@/components/heroes/HeroStatsCard.tsx";
 
 export const HeroStatsDashboard = () => {
     return (

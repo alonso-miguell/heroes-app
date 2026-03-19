@@ -1,4 +1,4 @@
-import {HeroGridCard} from "@/components/custom/HeroGridCard.tsx";
+import {HeroGridCard} from "@/components/heroes/HeroGridCard.tsx";
 
 export const HeroGrid=()=>{
     return(

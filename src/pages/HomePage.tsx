@@ -1,10 +1,12 @@
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
-import {HeroHeader} from "@/components/custom/HeroHeader.tsx";
-import {HeroStatsDashboard} from "@/components/custom/HeroStatsDashboard.tsx";
-import {HeroGrid} from "@/components/custom/HeroGrid.tsx";
+import {HeroHeader} from "@/components/heroes/HeroHeader.tsx";
+import {HeroStatsDashboard} from "@/components/heroes/HeroStatsDashboard.tsx";
+import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
 import {useState} from "react";
-import {CustomPagination} from "@/components/CustomPagination.tsx";
+import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
+import {CustomMenu} from "@/components/custom/CustomMenu.tsx";
+import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
 
 type HeroTab = | "all"
     | "favorites"
@@ -23,6 +25,10 @@ export default function SuperheroApp() {
                     title="Superhero Universe"
                     description="Discover, explore, and manage your favorite superheroes and villains"
                 />
+                
+
+                <CustomBreadcrumbs currentPage="Super Héroes" />
+
 
                 {/* Stats Dashboard */}
                 <HeroStatsDashboard />
