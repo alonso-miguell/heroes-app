@@ -3,10 +3,11 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {HeroHeader} from "@/components/heroes/HeroHeader.tsx";
 import {HeroStatsDashboard} from "@/components/heroes/HeroStatsDashboard.tsx";
 import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
 import {CustomMenu} from "@/components/custom/CustomMenu.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
+import {getHeroesByPage} from "@/actions/GetHeroesByPage.tsx";
 
 type HeroTab = | "all"
     | "favorites"
@@ -16,6 +17,9 @@ type HeroTab = | "all"
 
 export default function SuperheroApp() {
 
+    useEffect(() => {
+        getHeroesByPage().then(console.log);
+    }, []);
     const [heroTab, setHeroTab] = useState<HeroTab>("all");
     return (
         <>
