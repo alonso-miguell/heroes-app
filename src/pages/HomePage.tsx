@@ -8,6 +8,7 @@ import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
 import {CustomMenu} from "@/components/custom/CustomMenu.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
 import {getHeroesByPage} from "@/actions/GetHeroesByPage.tsx";
+import {useQuery} from "@tanstack/react-query";
 
 type HeroTab = | "all"
     | "favorites"
@@ -17,9 +18,26 @@ type HeroTab = | "all"
 
 export default function SuperheroApp() {
 
-    useEffect(() => {
-        getHeroesByPage().then(console.log);
-    }, []);
+    /*
+    This creates a dtaobject using tanstack query which will track
+    TTL for that data and autonmatically updated it when it has
+    expired and it's required  again
+     */
+    const {data} = useQuery(
+        {
+            queryKey:['heroes'],
+            queryFn: getHeroesByPage,
+            staleTime: 1000 * 10, //5 seconds
+        }
+    );
+
+    console.log(`data: ${data}`);
+
+
+    // useEffect(() => {
+    //     getHeroesByPage().then(console.log);
+    // }, []);
+
     const [heroTab, setHeroTab] = useState<HeroTab>("all");
     return (
         <>
