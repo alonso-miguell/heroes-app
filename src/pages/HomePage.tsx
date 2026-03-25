@@ -5,7 +5,6 @@ import {HeroStatsDashboard} from "@/components/heroes/HeroStatsDashboard.tsx";
 import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
 import {useEffect, useState} from "react";
 import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
-import {CustomMenu} from "@/components/custom/CustomMenu.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
 import {getHeroesByPage} from "@/actions/GetHeroesByPage.tsx";
 import {useQuery} from "@tanstack/react-query";
@@ -68,7 +67,7 @@ export default function SuperheroApp() {
                     <TabsContent value="all">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> ALL</div>
                         {/* Character Grid */}
-                        <HeroGrid/>
+                        <HeroGrid heroes={data?.heroes ? data.heroes : [] } />
                     </TabsContent>
 
                     <TabsContent value="favorites">
