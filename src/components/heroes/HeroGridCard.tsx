@@ -14,7 +14,7 @@ export const HeroGridCard = ({hero}: HeroCardProps) => {
 
     const navigator=useNavigate();
     const handleClick=()=>{
-        navigator('/hero/1');
+        navigator(`/hero/${hero.slug}`);
     }
 
     return (

@@ -19,12 +19,16 @@ export const appRouter= createBrowserRouter([
                 element: <SuperheroApp/>
             },
             {
-                path: "hero/1",
+                path: "hero/:slug", // :slug indicates a param, we decided to use slug instead of id since it's SEO friendly
                 element: <HeroPage/>
             },
             {
                 path: "search",
                 element: <SearchPage/>
+            },
+            {
+                path: "*",
+                element: <h1> PAGE ERROR: 404 NOT FOUND :(</h1>
             },
         ],
     },
