@@ -9,23 +9,36 @@ import {getHeroesByPage} from "@/actions/GetHeroesByPage.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {useSearchParams} from "react-router";
 
-type HeroTab = | "all"
-    | "favorites"
-    | "heroes"
-    | "villains";
-
-
 export default function SuperheroApp() {
+
+    // const [heroTab, setHeroTab] = useState<HeroTab>("all");
+    const [searchParams, setSearchParams] = useSearchParams('?tab=all');
+    const selectedTab = searchParams.get("tab") ?? 'all'; //uses ?? to assign all if tab is null or undefined
+    const page = searchParams.get("page") ?? '1';
+    const limit = searchParams.get("limit") ?? '6';
 
     /*
     This creates a dtaobject using tanstack query which will track
     TTL for that data and autonmatically updated it when it has
     expired and it's required  again
      */
+
+    /**
+     * Whenever using params for a request we need to also add them to tan stackquery
+     * to refresh these as dependencies.
+     * Since these url params aren't strictly positional we should use {} to indicate that
+     * order doens't matter:
+     * {'page':page, 'limit': limit }
+     *
+     * Or since the keys/variables share the same name
+     * {page, limit}
+     *
+     * Without {} we would be indicating that the params are positional (strict param order)
+     */
     const {data} = useQuery(
         {
-            queryKey: ['heroes'],
-            queryFn: getHeroesByPage,
+            queryKey: ['heroes', {page, limit}],
+            queryFn: () => getHeroesByPage(Number(limit),Number(page)),
             staleTime: 1000 * 10, //5 seconds
         }
     );
@@ -37,9 +50,7 @@ export default function SuperheroApp() {
     //     getHeroesByPage().then(console.log);
     // }, []);
 
-    // const [heroTab, setHeroTab] = useState<HeroTab>("all");
-    const [searchParams, setSearchParams] = useSearchParams('?tab=all');
-    const selectedTab = searchParams.get("tab") ?? 'all'; //uses ?? to assign all if tab is null or undefined
+
 
     //we use Memo to keep track of valid tabs, this will return all iuf the tab is invalid but it will stay the same in the url
     //we dopn't use a type because those are erased at runtime
@@ -129,7 +140,7 @@ export default function SuperheroApp() {
 
 
                 {/* Pagination */}
-                <CustomPagination totalPages={8} currentPage={3}/>
+                <CustomPagination totalPages={data?.pages ?? 1 }/>
             </>
         </>
     )
