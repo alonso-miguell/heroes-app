@@ -5,9 +5,9 @@ import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
 import {useEffect, useMemo, useState} from "react";
 import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
-import {getHeroesByPage} from "@/actions/GetHeroesByPage.tsx";
-import {useQuery} from "@tanstack/react-query";
 import {useSearchParams} from "react-router";
+import {useSummary} from "@/hooks/useSummary.tsx";
+import {useHeroesByPage} from "@/hooks/useHeroesByPage.tsx";
 
 export default function SuperheroApp() {
 
@@ -35,15 +35,12 @@ export default function SuperheroApp() {
      *
      * Without {} we would be indicating that the params are positional (strict param order)
      */
-    const {data} = useQuery(
-        {
-            queryKey: ['heroes', {page, limit}],
-            queryFn: () => getHeroesByPage(Number(limit),Number(page)),
-            staleTime: 1000 * 10, //5 seconds
-        }
-    );
+    const {data:heroesByPage} = useHeroesByPage(page, limit);
 
-    console.log(`data: ${data}`);
+    const {data:summary} = useSummary();
+
+
+    console.log(`data: ${heroesByPage}`);
 
 
     // useEffect(() => {
@@ -88,7 +85,7 @@ export default function SuperheroApp() {
                                 prev.set('tab', 'all');
                                 return prev;
                             })}>
-                            All Characters (16)
+                            All Characters ({summary?.totalHeroes})
                         </TabsTrigger>
 
                         <TabsTrigger
@@ -101,28 +98,28 @@ export default function SuperheroApp() {
                         </TabsTrigger>
 
                         <TabsTrigger
-                            value="favorites"
+                            value="heroes"
                             onClick={() => setSearchParams((prev) => {
                                 prev.set('tab', 'heroes');
                                 return prev;
                             })}>
-                            Heroes (12)
+                            Heroes ({summary?.heroCount})
                         </TabsTrigger>
 
                         <TabsTrigger
-                            value="favorites"
+                            value="villains"
                             onClick={() => setSearchParams((prev) => {
                                 prev.set('tab', 'villains');
                                 return prev;
                             })}>
-                            Villains (2)
+                            Villains ({summary?.villainCount})
                         </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="all">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> ALL</div>
                         {/* Character Grid */}
-                        <HeroGrid heroes={data?.heroes ? data.heroes : []}/>
+                        <HeroGrid heroes={heroesByPage?.heroes ? heroesByPage.heroes : []}/>
                     </TabsContent>
 
                     <TabsContent value="favorites">
@@ -140,7 +137,7 @@ export default function SuperheroApp() {
 
 
                 {/* Pagination */}
-                <CustomPagination totalPages={data?.pages ?? 1 }/>
+                <CustomPagination totalPages={heroesByPage?.pages ?? 1 }/>
             </>
         </>
     )
