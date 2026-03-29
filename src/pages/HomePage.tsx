@@ -16,6 +16,7 @@ export default function SuperheroApp() {
     const selectedTab = searchParams.get("tab") ?? 'all'; //uses ?? to assign all if tab is null or undefined
     const page = searchParams.get("page") ?? '1';
     const limit = searchParams.get("limit") ?? '6';
+    const category = searchParams.get("category") ?? 'all';
 
     /*
     This creates a dtaobject using tanstack query which will track
@@ -35,7 +36,7 @@ export default function SuperheroApp() {
      *
      * Without {} we would be indicating that the params are positional (strict param order)
      */
-    const {data:heroesByPage} = useHeroesByPage(page, limit);
+    const {data:heroesByPage} = useHeroesByPage(page, limit, category);
 
     const {data:summary} = useSummary();
 
@@ -83,6 +84,8 @@ export default function SuperheroApp() {
                             value="all"
                             onClick={() => setSearchParams((prev) => {
                                 prev.set('tab', 'all');
+                                prev.set('category', 'all');
+                                prev.set('page', '1');
                                 return prev;
                             })}>
                             All Characters ({summary?.totalHeroes})
@@ -101,6 +104,8 @@ export default function SuperheroApp() {
                             value="heroes"
                             onClick={() => setSearchParams((prev) => {
                                 prev.set('tab', 'heroes');
+                                prev.set('category', 'hero');
+                                prev.set('page', '1');
                                 return prev;
                             })}>
                             Heroes ({summary?.heroCount})
@@ -110,6 +115,8 @@ export default function SuperheroApp() {
                             value="villains"
                             onClick={() => setSearchParams((prev) => {
                                 prev.set('tab', 'villains');
+                                prev.set('category', 'villain');
+                                prev.set('page', '1');
                                 return prev;
                             })}>
                             Villains ({summary?.villainCount})
@@ -124,14 +131,17 @@ export default function SuperheroApp() {
 
                     <TabsContent value="favorites">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> FAVORITES</div>
+                        <HeroGrid heroes={heroesByPage?.heroes ? heroesByPage.heroes : []}/>
                     </TabsContent>
 
                     <TabsContent value="heroes">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> HEROES</div>
+                        <HeroGrid heroes={heroesByPage?.heroes ? heroesByPage.heroes : []}/>
                     </TabsContent>
 
                     <TabsContent value="villains">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> VILLAINS</div>
+                        <HeroGrid heroes={heroesByPage?.heroes ? heroesByPage.heroes : []}/>
                     </TabsContent>
                 </Tabs>
 
