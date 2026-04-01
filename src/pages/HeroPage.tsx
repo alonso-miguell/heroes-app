@@ -1,33 +1,47 @@
 import {useParams} from "react-router";
 
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Shield, Zap, Brain, Gauge, Users, Star, Award } from "lucide-react"
+import {Badge} from "@/components/ui/badge"
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
+import {Progress} from "@/components/ui/progress"
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import {Shield, Zap, Brain, Gauge, Users, Star, Award} from "lucide-react"
+import {useHeroBySlug} from "@/hooks/useHeroBySlug.tsx";
 
-const superheroData = {
-    id: "1",
-    name: "Clark Kent",
-    alias: "Superman",
-    powers: ["Súper fuerza", "Vuelo", "Visión de calor", "Visión de rayos X", "Invulnerabilidad", "Súper velocidad"],
-    description: "El Último Hijo de Krypton, protector de la Tierra y símbolo de esperanza para toda la humanidad.",
-    strength: 10,
-    intelligence: 8,
-    speed: 9,
-    durability: 10,
-    team: "Liga de la Justicia",
-    image: "/placeholder.svg?height=300&width=300",
-    firstAppearance: "1938",
-    status: "Activo",
-    category: "Héroe",
-    universe: "DC",
-}
 
-export const HeroPage= ()=> {
+export const HeroPage = () => {
     //useParams is a react router hook to get url params
-    const urlParams=useParams();
-    const {slug}=urlParams;
+    const urlParams = useParams();
+    const {slug = ''} = urlParams;
+
+    /**
+     * We extract isLoading and isError together with data
+     * from tanstack Query.
+     * These other are used for checking if the request has
+     * received a response and data is ready to be used
+     *
+     * It's a good practice to use isLoading before trying
+     * to render an element
+     */
+    const {
+        data: superheroData,
+        isLoading,
+        isError
+    } = useHeroBySlug(slug);
+
+    //At this point superheroData could be undefined
+    console.log(`undefined?`,superheroData );
+
+    if (isLoading || !superheroData) {
+        return <div>LOADING...</div>;
+    }
+
+    if (isError) {
+        return <div>There was an error getting hero data...</div>;
+    }
+
+    //At this point superheroData must contain a response since
+    //we already passed isLoading
+    console.log('NOT undefined', {superheroData});
 
     const totalPower =
         superheroData.strength + superheroData.intelligence + superheroData.speed + superheroData.durability
@@ -79,7 +93,7 @@ export const HeroPage= ()=> {
                             />
                             <div className="absolute -top-2 -right-2">
                                 <div className="bg-yellow-400 text-black rounded-full p-2">
-                                    <Star className="w-6 h-6" />
+                                    <Star className="w-6 h-6"/>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +103,8 @@ export const HeroPage= ()=> {
                                 <Badge className={`${getCategoryColor(superheroData.category)} text-white`}>
                                     {superheroData.category}
                                 </Badge>
-                                <Badge className={`${getStatusColor(superheroData.status)} text-white`}>{superheroData.status}</Badge>
+                                <Badge
+                                    className={`${getStatusColor(superheroData.status)} text-white`}>{superheroData.status}</Badge>
                                 <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
                                     {superheroData.universe}
                                 </Badge>
@@ -123,19 +138,19 @@ export const HeroPage= ()=> {
                 <Tabs defaultValue="stats" className="w-full">
                     <TabsList className="grid w-full grid-cols-4 mb-8">
                         <TabsTrigger value="stats" className="flex items-center gap-2">
-                            <Gauge className="w-4 h-4" />
+                            <Gauge className="w-4 h-4"/>
                             Estadísticas
                         </TabsTrigger>
                         <TabsTrigger value="powers" className="flex items-center gap-2">
-                            <Zap className="w-4 h-4" />
+                            <Zap className="w-4 h-4"/>
                             Poderes
                         </TabsTrigger>
                         <TabsTrigger value="team" className="flex items-center gap-2">
-                            <Users className="w-4 h-4" />
+                            <Users className="w-4 h-4"/>
                             Equipo
                         </TabsTrigger>
                         <TabsTrigger value="info" className="flex items-center gap-2">
-                            <Award className="w-4 h-4" />
+                            <Award className="w-4 h-4"/>
                             Información
                         </TabsTrigger>
                     </TabsList>
@@ -147,12 +162,12 @@ export const HeroPage= ()=> {
                                 <CardContent className="pt-6">
                                     <div className="flex justify-center mb-4">
                                         <div className="bg-red-100 p-3 rounded-full">
-                                            <Zap className="w-8 h-8 text-red-600" />
+                                            <Zap className="w-8 h-8 text-red-600"/>
                                         </div>
                                     </div>
                                     <h3 className="font-semibold text-lg mb-2">Fuerza</h3>
                                     <div className="text-3xl font-bold text-red-600 mb-2">{superheroData.strength}</div>
-                                    <Progress value={superheroData.strength * 10} className="h-2" />
+                                    <Progress value={superheroData.strength * 10} className="h-2"/>
                                 </CardContent>
                             </Card>
 
@@ -161,12 +176,13 @@ export const HeroPage= ()=> {
                                 <CardContent className="pt-6">
                                     <div className="flex justify-center mb-4">
                                         <div className="bg-purple-100 p-3 rounded-full">
-                                            <Brain className="w-8 h-8 text-purple-600" />
+                                            <Brain className="w-8 h-8 text-purple-600"/>
                                         </div>
                                     </div>
                                     <h3 className="font-semibold text-lg mb-2">Inteligencia</h3>
-                                    <div className="text-3xl font-bold text-purple-600 mb-2">{superheroData.intelligence}</div>
-                                    <Progress value={superheroData.intelligence * 10} className="h-2" />
+                                    <div
+                                        className="text-3xl font-bold text-purple-600 mb-2">{superheroData.intelligence}</div>
+                                    <Progress value={superheroData.intelligence * 10} className="h-2"/>
                                 </CardContent>
                             </Card>
 
@@ -175,12 +191,12 @@ export const HeroPage= ()=> {
                                 <CardContent className="pt-6">
                                     <div className="flex justify-center mb-4">
                                         <div className="bg-yellow-100 p-3 rounded-full">
-                                            <Gauge className="w-8 h-8 text-yellow-600" />
+                                            <Gauge className="w-8 h-8 text-yellow-600"/>
                                         </div>
                                     </div>
                                     <h3 className="font-semibold text-lg mb-2">Velocidad</h3>
                                     <div className="text-3xl font-bold text-yellow-600 mb-2">{superheroData.speed}</div>
-                                    <Progress value={superheroData.speed * 10} className="h-2" />
+                                    <Progress value={superheroData.speed * 10} className="h-2"/>
                                 </CardContent>
                             </Card>
 
@@ -189,12 +205,13 @@ export const HeroPage= ()=> {
                                 <CardContent className="pt-6">
                                     <div className="flex justify-center mb-4">
                                         <div className="bg-green-100 p-3 rounded-full">
-                                            <Shield className="w-8 h-8 text-green-600" />
+                                            <Shield className="w-8 h-8 text-green-600"/>
                                         </div>
                                     </div>
                                     <h3 className="font-semibold text-lg mb-2">Resistencia</h3>
-                                    <div className="text-3xl font-bold text-green-600 mb-2">{superheroData.durability}</div>
-                                    <Progress value={superheroData.durability * 10} className="h-2" />
+                                    <div
+                                        className="text-3xl font-bold text-green-600 mb-2">{superheroData.durability}</div>
+                                    <Progress value={superheroData.durability * 10} className="h-2"/>
                                 </CardContent>
                             </Card>
                         </div>
@@ -209,28 +226,28 @@ export const HeroPage= ()=> {
                                     <div className="flex items-center gap-4">
                                         <div className="w-24 text-sm font-medium">Fuerza</div>
                                         <div className="flex-1">
-                                            <Progress value={superheroData.strength * 10} className="h-4" />
+                                            <Progress value={superheroData.strength * 10} className="h-4"/>
                                         </div>
                                         <div className="w-12 text-right font-bold">{superheroData.strength}/10</div>
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <div className="w-24 text-sm font-medium">Inteligencia</div>
                                         <div className="flex-1">
-                                            <Progress value={superheroData.intelligence * 10} className="h-4" />
+                                            <Progress value={superheroData.intelligence * 10} className="h-4"/>
                                         </div>
                                         <div className="w-12 text-right font-bold">{superheroData.intelligence}/10</div>
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <div className="w-24 text-sm font-medium">Velocidad</div>
                                         <div className="flex-1">
-                                            <Progress value={superheroData.speed * 10} className="h-4" />
+                                            <Progress value={superheroData.speed * 10} className="h-4"/>
                                         </div>
                                         <div className="w-12 text-right font-bold">{superheroData.speed}/10</div>
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <div className="w-24 text-sm font-medium">Resistencia</div>
                                         <div className="flex-1">
-                                            <Progress value={superheroData.durability * 10} className="h-4" />
+                                            <Progress value={superheroData.durability * 10} className="h-4"/>
                                         </div>
                                         <div className="w-12 text-right font-bold">{superheroData.durability}/10</div>
                                     </div>
@@ -243,7 +260,7 @@ export const HeroPage= ()=> {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Zap className="w-6 h-6 text-yellow-500" />
+                                    <Zap className="w-6 h-6 text-yellow-500"/>
                                     Superpoderes
                                 </CardTitle>
                             </CardHeader>
@@ -256,7 +273,7 @@ export const HeroPage= ()=> {
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="bg-blue-500 p-2 rounded-full">
-                                                    <Zap className="w-4 h-4 text-white" />
+                                                    <Zap className="w-4 h-4 text-white"/>
                                                 </div>
                                                 <span className="font-medium text-blue-900">{power}</span>
                                             </div>
@@ -271,17 +288,19 @@ export const HeroPage= ()=> {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Users className="w-6 h-6 text-green-500" />
+                                    <Users className="w-6 h-6 text-green-500"/>
                                     Afiliación de Equipo
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-center py-8">
-                                    <div className="bg-green-100 p-6 rounded-full w-24 h-24 mx-auto mb-4 flex items-center justify-center">
-                                        <Users className="w-12 h-12 text-green-600" />
+                                    <div
+                                        className="bg-green-100 p-6 rounded-full w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+                                        <Users className="w-12 h-12 text-green-600"/>
                                     </div>
                                     <h3 className="text-2xl font-bold text-green-700 mb-2">{superheroData.team}</h3>
-                                    <p className="text-gray-600">Miembro activo del equipo de superhéroes más poderoso</p>
+                                    <p className="text-gray-600">Miembro activo del equipo de superhéroes más
+                                        poderoso</p>
                                 </div>
                             </CardContent>
                         </Card>
