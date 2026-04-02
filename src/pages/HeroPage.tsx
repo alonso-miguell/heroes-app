@@ -31,13 +31,16 @@ export const HeroPage = () => {
     //At this point superheroData could be undefined
     console.log(`undefined?`,superheroData );
 
+    // look at the hook using tan stackquery which has disabled retrying requests
+    if (isError) {
+        return <div>There was an error getting hero data...</div>;
+    }
+
     if (isLoading || !superheroData) {
         return <div>LOADING...</div>;
     }
 
-    if (isError) {
-        return <div>There was an error getting hero data...</div>;
-    }
+
 
     //At this point superheroData must contain a response since
     //we already passed isLoading
@@ -49,9 +52,9 @@ export const HeroPage = () => {
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
-            case "activo":
+            case "active":
                 return "bg-green-500"
-            case "inactivo":
+            case "inactive":
                 return "bg-gray-500"
             case "retirado":
                 return "bg-blue-500"
@@ -62,9 +65,9 @@ export const HeroPage = () => {
 
     const getCategoryColor = (category: string) => {
         switch (category.toLowerCase()) {
-            case "héroe":
+            case "hero":
                 return "bg-blue-500"
-            case "villano":
+            case "villain":
                 return "bg-red-500"
             case "antihéroe":
                 return "bg-purple-500"
@@ -77,8 +80,6 @@ export const HeroPage = () => {
 
 
         <div className="min-h-screen bg-gray-50">
-            <div>HeroPage slug: {slug} </div>
-
             {/* Header Banner */}
             <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 text-white">
                 <div className="max-w-7xl mx-auto px-6 py-12">
