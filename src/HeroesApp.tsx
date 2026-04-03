@@ -3,6 +3,7 @@ import {appRouter} from "@/router/app.router.tsx";
 import {useEffect} from "react";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import {HeroesContextProvider} from "@/HeroesContext.tsx";
 
 export const HeroesApp = () => {
 
@@ -25,9 +26,10 @@ export const HeroesApp = () => {
 
         <>
             <QueryClientProvider client={queryClient}>
-            <RouterProvider router={appRouter} />
-
-                <ReactQueryDevtools initialIsOpen={false} />
+                <HeroesContextProvider>
+                    <RouterProvider router={appRouter}/>
+                    <ReactQueryDevtools initialIsOpen={false}/>
+                </HeroesContextProvider>
             </QueryClientProvider>
         </>
     )

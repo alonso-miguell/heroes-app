@@ -2,12 +2,13 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {HeroHeader} from "@/components/heroes/HeroHeader.tsx";
 import {HeroStatsDashboard} from "@/components/heroes/HeroStatsDashboard.tsx";
 import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
-import {useEffect, useMemo, useState} from "react";
+import {use, useEffect, useMemo, useState} from "react";
 import {CustomPagination} from "@/components/custom/CustomPagination.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
 import {useSearchParams} from "react-router";
 import {useSummary} from "@/hooks/useSummary.tsx";
 import {useHeroesByPage} from "@/hooks/useHeroesByPage.tsx";
+import {HeroesContext} from "@/HeroesContext.tsx";
 
 export default function SuperheroApp() {
 
@@ -40,6 +41,7 @@ export default function SuperheroApp() {
 
     const {data:summary} = useSummary();
 
+    const {favoritesCount, favorites}= use(HeroesContext);
 
     console.log(`data: ${heroesByPage}`);
 
@@ -97,7 +99,7 @@ export default function SuperheroApp() {
                                 prev.set('tab', 'favorites');
                                 return prev;
                             })}>
-                            Favorites (3)
+                            Favorites ({favoritesCount})
                         </TabsTrigger>
 
                         <TabsTrigger
@@ -131,7 +133,7 @@ export default function SuperheroApp() {
 
                     <TabsContent value="favorites">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> FAVORITES</div>
-                        <HeroGrid heroes={heroesByPage?.heroes ? heroesByPage.heroes : []}/>
+                        <HeroGrid heroes={favorites? favorites : []}/>
                     </TabsContent>
 
                     <TabsContent value="heroes">
@@ -145,9 +147,12 @@ export default function SuperheroApp() {
                     </TabsContent>
                 </Tabs>
 
+                {/* Pagination for everything ecept favorites */}
 
-                {/* Pagination */}
-                <CustomPagination totalPages={heroesByPage?.pages ?? 1 }/>
+                { category!=="favorites" &&
+                    <CustomPagination totalPages={heroesByPage?.pages ?? 1 }/>
+
+                }
             </>
         </>
     )
