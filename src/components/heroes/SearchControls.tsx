@@ -15,11 +15,13 @@ export const SearchControls = () => {
         if (event.key === "Enter") {
             console.log(inputRef.current?.value);
             setSearchParams(prev => {
-                prev.set("name", inputRef.current?.value);
+                prev.set("name", inputRef.current?.value ?? "");
                 return prev;
             });
         }
     }
+
+    const nameValue=searchParams.get("name");
 
     return (
         <>
@@ -29,7 +31,7 @@ export const SearchControls = () => {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"/>
                     <Input placeholder="Search heroes, villains, powers, teams..."
                            className="pl-12 h-12 text-lg bg-white"
-                        // value={inputRef.current}
+                        defaultValue={nameValue!==null? nameValue:""}
                            ref={inputRef}
 
                            onKeyDown={setSearch}
