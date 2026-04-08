@@ -3,6 +3,7 @@ import {Filter, Grid, Plus, Search, SortAsc} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useEffect, useRef, useState} from "react";
 import {useSearchParams} from "react-router";
+import {SearchFilters} from "@/components/heroes/SearchFilters.tsx";
 
 export const SearchControls = () => {
 
@@ -22,6 +23,23 @@ export const SearchControls = () => {
     }
 
     const nameValue=searchParams.get("name");
+    const toggleFilters = ()=>{
+        if (filtersActive==="advanced-filters") {
+            setSearchParams( prev => {
+               prev.delete("filters");
+               return prev;
+            });
+        }
+        else{
+            setSearchParams( prev => {
+                prev.set("filters", "true");
+                return prev;
+            })
+        }
+    }
+
+    const filtersActive = searchParams.has("filters") ? "advanced-filters" : "";
+
 
     return (
         <>
@@ -40,7 +58,7 @@ export const SearchControls = () => {
 
                 {/* Action buttons */}
                 <div className="flex gap-2">
-                    <Button variant="outline" className="h-12 bg-white">
+                    <Button variant={filtersActive==="advanced-filters"? "default": "outline" } className="h-12 " onClick={toggleFilters}>
                         <Filter className="h-4 w-4 mr-2"/>
                         Filters
                     </Button>
@@ -61,6 +79,7 @@ export const SearchControls = () => {
                 </div>
             </div>
 
+            <SearchFilters  toggleValue={[filtersActive]} />
         </>
     );
 }

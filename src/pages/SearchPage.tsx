@@ -1,7 +1,6 @@
 import {HeroHeader} from "@/components/heroes/HeroHeader.tsx";
 import {HeroStatsDashboard} from "@/components/heroes/HeroStatsDashboard.tsx";
 import {SearchControls} from "@/components/heroes/SearchControls.tsx";
-import {SearchFilters} from "@/components/heroes/SearchFilters.tsx";
 import {CustomBreadcrumbs} from "@/components/custom/CustomBreadcrumbs.tsx";
 import {HeroGrid} from "@/components/heroes/HeroGrid.tsx";
 import {useSearchParams} from "react-router";
@@ -9,9 +8,10 @@ import {useSearchHero} from "@/hooks/useSearchHero.tsx";
 
 export const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const nameValue = searchParams.get("name") ?? "";
+    const name = searchParams.get("name") ?? "";
+    const strength = Number(searchParams.get("strength")) ?? 0;
 
-    const {data: searchResponse, isLoading} = useSearchHero(nameValue);
+    const {data: searchResponse, isLoading} = useSearchHero({name, strength});
 
     if (isLoading) {
         return (
@@ -37,7 +37,7 @@ export const SearchPage = () => {
 
             <HeroStatsDashboard/>
             <SearchControls/>
-            <SearchFilters/>
+
             <HeroGrid heroes={searchResponse?.heroes ?? []}/>
 
 

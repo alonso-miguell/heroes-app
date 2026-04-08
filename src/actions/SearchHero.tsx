@@ -4,7 +4,7 @@ import type {SearchHeroResponse} from "@/interfaces/SearchHeroResponse.tsx";
 
 const baseUrl = import.meta.env.VITE_APP_URL;
 
-interface SearchHeroRequest {
+export interface SearchHeroRequest {
     name?: string;
     team?: string;
     category?: string;
